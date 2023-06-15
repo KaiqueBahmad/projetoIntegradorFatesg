@@ -10,7 +10,7 @@ public class ProjetoIntegrador {
     // 2 : Ocupada;
     public static void main(String[] args) {
         int cinema[][][][] = new int[32][16][64][64];
-        String sessões[][] = new String[32][16];
+        String sessões[][][] = new String[32][16][2];
         String ingressos[][] = new String[32*16][3];
         String filmes[] = new String[128];
         // Ingresso = ["123909321", "meia"/"inteira", "2.3", "A13"]
@@ -70,7 +70,14 @@ public class ProjetoIntegrador {
             
             if ("3".equals(opção) && admin) {
                 System.out.println("Selecione uma Sala (-1 para voltar)");
-                listRooms(cinema);
+                listRooms(cinema, sessões);
+                String selectedRoom = leitor.nextLine();
+                if (isNumeric(selectedRoom)) {
+                    int selected = Integer.parseInt(selectedRoom);
+                    if (selected > 0) {
+                        
+                    }
+                } 
             }
             if ("0".equals(opção) && admin) {
                 admin = false;
@@ -86,9 +93,38 @@ public class ProjetoIntegrador {
         }
     }
    
-    public static void listRooms(int[][][][] cinema) {
+    public static int listRooms(int[][][][] cinema, String sessões[][][]) {
+        for (int i =0; i < cinema.length; i++) {
+            if (!roomIsUnused(cinema, i)) {
+                int roomHeigth = 0;
+                int roomWidth = 0;
+                int numSessions = 0;
+                int k = 0;
+                while (cinema[i][0][0][k] != 0) {
+                    k++;
+                }
+                int j = 0;
+                while (cinema[i][0][j][0] != 0) {
+                    j++;
+                }
+                int l = 0;
+                for (int loop = 0; loop < sessões[i].length; loop++) {
+                    if (!"".equals(sessões[i][loop][0])) {
+                        l++;
+                    }
+                }
+                roomHeigth = j;
+                roomWidth = k;
+                numSessions = l;
+                System.out.printf("Sala %d (%dx%d), possui %d sessões cadastradas.", i,roomHeigth, roomWidth, numSessions);
+            }
+        }
     }
    
+    public static void listSessions(int[][][][] cinema, String[][][] sessões) {
+        
+    }
+    
     public static void newRoom(int[][][][] cinema, Scanner leitor) {
         System.out.println("Insira a quantidade de Fileiras na Sala: ");
         int heigth = Integer.parseInt(leitor.nextLine());
@@ -122,7 +158,9 @@ public class ProjetoIntegrador {
         }
         return isEmpty;
     }
-
+    private static boolean isNumeric(String str){
+        return str != null && str.matches("[0-9]+");
+    }
 }
         /*
     public static void selectRoom() {
